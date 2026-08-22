@@ -1,5 +1,5 @@
 add_library(heg
-	src/lib.cpp
+	src/heg.cpp
 )
 
 target_include_directories(heg
