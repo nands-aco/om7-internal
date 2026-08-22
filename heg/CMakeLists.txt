@@ -3,6 +3,5 @@ add_library(heg
 )
 
 target_include_directories(heg
-#	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
