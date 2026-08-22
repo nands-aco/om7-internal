@@ -1,0 +1,13 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Debug - LLDB",
+			"type": "lldb",
+			"request": "launch",
+			"program": "${workspaceFolder}/_build/om7/Debug/om7.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}",
+		}
+	]
+}
