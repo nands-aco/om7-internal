@@ -1,6 +1,6 @@
 #include "lib.hpp"
 
-char *getName()
+const char *getName()
 {
 	return "TEST";
 }

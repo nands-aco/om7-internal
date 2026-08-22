@@ -1,1 +1,1 @@
-extern char *getName();
+extern const char *getName();
