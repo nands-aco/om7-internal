@@ -4,8 +4,9 @@ find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
 
 add_executable(om7
-	src/main.cpp
-	src/run_glfw.cpp
+	src/_main.cpp
+	src/_glfw.cpp
+	src/om7-application.cpp
 )
 
 target_link_libraries(om7 PRIVATE heg)
