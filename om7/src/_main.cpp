@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <memory>
 
-std::unique_ptr<om7::Om7Application> application = std::make_unique<om7::Om7Application>();
+std::unique_ptr<om7::Om7Application> application = std::make_unique<om7::Om7Application>("OverMode7", 240, 240);
 
 int main(int argc, char* argv[])
 {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <stdexcept>
 #include <string>
 
@@ -23,20 +24,29 @@ namespace om7
 		const char* what() const noexcept override { return std::logic_error::what(); }
 	};
 
+	// １ピクセルのフォーマットを表す構造体です。
+	// ※プラットフォームごとに定義を調整する可能性があります。
+	struct Om7GraphPixel
+	{
+		std::uint16_t R : 4;
+		std::uint16_t G : 4;
+		std::uint16_t B : 4;
+		std::uint16_t A : 4;
+	};
+	static_assert(sizeof(Om7GraphPixel) == 2);
+
 	class Om7Application
 	{
 	private:
 		GLFWwindow *Window;
 	public:
-		Om7Application();
+		Om7Application(const char *title, std::int32_t width, std::int32_t height);
 		virtual ~Om7Application();
-		void Init();
-		void Term();
 		void Run();
 	protected:
 		virtual void OnInit() {}
 		virtual void OnTerm() {}
-		virtual void OnUpdate() {}
-		virtual void OnGraphicRender() {}
+		virtual void OnUpdate() noexcept {}
+		virtual void OnGraphRender(const std::int32_t width, const std::int32_t height, Om7GraphPixel buffer[]) noexcept {}
 	};
 }

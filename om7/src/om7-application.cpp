@@ -17,15 +17,6 @@
 
 namespace
 {
-	// タイトルバーのテキストを表します。
-	constexpr const char *Title = "OverMode7";
-	// 1秒間に対するフレーム数を表します。
-	constexpr std::int32_t FramesPerSecond = 60;
-	// 1フレームの時間間隔(ナノ秒)表します。
-	constexpr std::chrono::nanoseconds FrameInterval{1'000'000'000 / FramesPerSecond};
-	// スキップを許容するフレーム数を表します。
-	constexpr std::int32_t MaxRenderSkipFrames = 3;
-
 	void OnError(int errorCode, const char *description)
 	{
 		std::cerr << "[GLFW Error] code=" << errorCode  << " description=" << (description ? description : "(null)")  << std::endl;
@@ -96,15 +87,45 @@ namespace
 
 } // namespace
 
+//
+// ウィンドウに関係するもの
+//
+namespace
+{
+
+}
+
+//
+// OpenGLに関係するもの
+//
+namespace
+{
+	// 1秒間に対するフレーム数を表します。
+	constexpr double FramesPerSecond = 60.0;
+	// 1フレームの時間間隔(秒)表します。
+	constexpr double FrameInterval = 1.0 / FramesPerSecond;
+	// ドロップを許容するフレーム数を表します。
+	constexpr std::int32_t MaxDropFrames = 3;
+	// 画面の横幅を表します。
+	constexpr std::int32_t ScreenWidth = 240;
+	// 画面の縦幅を表します。
+	constexpr std::int32_t ScreenHeight = 240;
+	// 画面のデータサイズを表します。
+	constexpr std::int32_t ScreenBufferSize = ScreenWidth * ScreenHeight;
+	// 画面のバッファ数を表します。
+	constexpr std::int32_t ScreenBufferCount = 2;
+	// 画面バッファを表します。
+	om7::Om7GraphPixel ScreenBuffers[ScreenBufferCount][ScreenBufferSize];
+	// 使用中の画面バッファのインデックスを表します。
+	std::int32_t ScreenBufferIndex = 0;
+}
+
 namespace om7
 {
-	Om7Application::Om7Application()
+	Om7Application::Om7Application(const char *title, std::int32_t width, std::int32_t height) 
 	{
 		glfwSetErrorCallback(OnError);
 		if (glfwInit() != GLFW_TRUE) throw Om7RuntimeException("glfwInit failed.");
-
-		int width = 240;
-		int height = 240;
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -119,11 +140,11 @@ namespace om7
 			if (!monitor) throw Om7RuntimeException("Primary monitor is not available.");
 			const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 			if (!mode) throw Om7RuntimeException("Failed to get video mode.");
-			Window = glfwCreateWindow(mode->width, mode->height, Title, monitor, nullptr);
+			Window = glfwCreateWindow(mode->width, mode->height, title, monitor, nullptr);
 		}
 		else
 		{
-			Window = glfwCreateWindow(width, height, Title, nullptr, nullptr);
+			Window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 		}
 		if (!Window) throw Om7RuntimeException("glfwCreateWindow failed.");
 		glfwMakeContextCurrent(Window);
@@ -138,64 +159,41 @@ namespace om7
 		glfwTerminate();
 	}
 
-	void Om7Application::Init()
-	{
-	}
-
-	void Om7Application::Term()
-	{
-	}
-
 	void Om7Application::Run()
 	{
 		OnInit();
-		// int fbWidth = 0;
-		// int fbHeight = 0;
-		// glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
-		// glViewport(0, 0, fbWidth, fbHeight);
-
-		using Clock = std::chrono::steady_clock;
-		auto previous = Clock::now();
-		auto accumulator = std::chrono::nanoseconds::zero();
-
-		while (glfwWindowShouldClose(Window) == GLFW_FALSE)
+		double delTime = glfwGetTime() + FrameInterval;
+		int dropCount = 0;
+		bool dropFlag = false;
+		while (!glfwWindowShouldClose(Window))
 		{
-			const auto now = Clock::now();
-			auto delta = std::chrono::duration_cast<std::chrono::nanoseconds>(now - previous);
-			previous = now;
-
-			// 巨大な一時停止復帰時に暴走しないよう上限を設定
-			delta = std::min(delta, FrameInterval * 8);
-			accumulator += delta;
-
-			glfwPollEvents();
-
-			// 入力・更新は60FPS固定
-			int updateCount = 0;
-			while (accumulator >= FrameInterval)
+			OnUpdate();
+			dropCount = delTime <= glfwGetTime() ? dropCount + 1 : 0;
+			while (delTime >= glfwGetTime()) glfwPollEvents();
+			delTime = glfwGetTime() + FrameInterval;
+			if (dropCount == 0 || dropCount >= 4)
 			{
-				updateFixedStep();
-				accumulator -= FrameInterval;
-				++updateCount;
-
-				// 追いつかない場合は描画スキップ許容を超えないよう更新回数を制限
-				if (updateCount >= (MaxRenderSkipFrames + 1))
+				OnGraphRender(ScreenWidth, ScreenHeight, ScreenBuffers[ScreenBufferIndex]);
+				if (dropFlag)
 				{
-					break;
+					// TODO: ドロップ特有処理
+					dropFlag = false;
 				}
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, ScreenWidth, ScreenHeight, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, ScreenBuffers[ScreenBufferIndex]);
+				// glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, ScreenWidth, ScreenHeight, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, ScreenBuffers[ScreenBufferIndex]);
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				glfwSwapBuffers(Window);
+				ScreenBufferIndex = (ScreenBufferIndex + 1) & 1;
 			}
-
-			renderFrame();
-			glfwSwapBuffers(Window);
-
-			// 次フレーム開始まで待機（CPU使用率抑制）
-			const auto frameEnd = Clock::now();
-			const auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(frameEnd - now);
-			if (elapsed < FrameInterval)
+			else
 			{
-				std::this_thread::sleep_for(FrameInterval - elapsed);
+				// フレームのスキップ
+				dropFlag = true;
 			}
+			glfwPollEvents();
 		}
+
 		OnTerm();
 	}
 } // namespace om7
