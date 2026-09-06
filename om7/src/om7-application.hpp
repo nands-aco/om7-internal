@@ -44,8 +44,8 @@ namespace om7
 		virtual ~Om7Application();
 		int Run();
 	protected:
-		virtual void OnInit() {}
-		virtual void OnTerm() {}
+		virtual void OnInit();
+		virtual void OnTerm();
 		virtual void OnUpdate() noexcept {}
 		virtual void OnGraphRender(const std::int32_t width, const std::int32_t height, Om7GraphPixel buffer[]) noexcept {}
 	};
