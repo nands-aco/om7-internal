@@ -48,7 +48,7 @@ namespace
 	void OnCharMods(GLFWwindow * /*window*/, unsigned int /*codepoint*/, int /*mods*/) {}
 	void OnDrop(GLFWwindow * /*window*/, int /*pathCount*/, const char *[] /*paths*/) {}
 
-	void registerEventStubs(GLFWwindow *window)
+	void RegisterEventStubs(GLFWwindow *window)
 	{
 		glfwSetWindowPosCallback(window, OnWindowPos);
 		glfwSetWindowSizeCallback(window, OnWindowSize);
@@ -73,12 +73,12 @@ namespace
 		glfwSetDropCallback(window, OnDrop);
 	}
 
-	void updateFixedStep()
+	void UpdateFixedStep()
 	{
 		// TODO: 60FPS固定で処理したいゲームロジックをここに実装
 	}
 
-	void renderFrame()
+	void RenderFrame()
 	{
 		// TODO: OpenGL 3.3 Core の描画処理をここに実装
 		glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
@@ -150,7 +150,7 @@ namespace om7
 		glfwMakeContextCurrent(Window);
 		glfwSwapInterval(0); // 自前60FPS制御のためVSync無効
 		if (gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)) == 0) throw Om7RuntimeException("Failed to initialize GLAD.");
-		registerEventStubs(Window);
+		RegisterEventStubs(Window);
 	}
 
 	Om7Application::~Om7Application()
