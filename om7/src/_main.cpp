@@ -8,8 +8,7 @@ std::unique_ptr<om7::Om7Application> application = std::make_unique<om7::Om7Appl
 int main(int argc, char* argv[])
 {
 	// (0, 0) 指定でフルスクリーン起動
-	application->Run();
-	return 0;
+	return application->Run();
 }
 
 #if defined(_WIN32)

@@ -159,7 +159,7 @@ namespace om7
 		glfwTerminate();
 	}
 
-	void Om7Application::Run()
+	int Om7Application::Run()
 	{
 		OnInit();
 		double delTime = glfwGetTime() + FrameInterval;
@@ -195,5 +195,6 @@ namespace om7
 		}
 
 		OnTerm();
+		return 0;
 	}
 } // namespace om7

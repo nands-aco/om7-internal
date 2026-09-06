@@ -42,7 +42,7 @@ namespace om7
 	public:
 		Om7Application(const char *title, std::int32_t width, std::int32_t height);
 		virtual ~Om7Application();
-		void Run();
+		int Run();
 	protected:
 		virtual void OnInit() {}
 		virtual void OnTerm() {}
