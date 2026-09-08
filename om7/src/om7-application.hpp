@@ -24,20 +24,6 @@ namespace om7
 		const char* what() const noexcept override { return std::logic_error::what(); }
 	};
 
-	// １ピクセルのフォーマットを表す構造体です。
-	// ※プラットフォームごとに定義を調整する可能性があります。
-	struct Om7GraphPixel
-	{
-		Om7GraphPixel() : R(0), G(0), B(0), A(15) {}
-		Om7GraphPixel(std::uint16_t r, std::uint16_t g, std::uint16_t b) : R(r), G(g), B(b), A(15) {}
-		Om7GraphPixel(std::uint16_t r, std::uint16_t g, std::uint16_t b, std::uint16_t a) : R(r), G(g), B(b), A(a) {}
-		std::uint16_t A : 4;
-		std::uint16_t B : 4;
-		std::uint16_t G : 4;
-		std::uint16_t R : 4;
-	};
-	static_assert(sizeof(Om7GraphPixel) == 2);
-
 	class Om7Application
 	{
 	private:
@@ -50,13 +36,13 @@ namespace om7
 		virtual void OnInit();
 		virtual void OnTerm();
 		virtual void OnUpdate() noexcept {}
-		virtual void OnGraphRender(const std::int32_t width, const std::int32_t height, Om7GraphPixel buffer[]) noexcept
+		virtual void OnGraphRender(const std::int32_t width, const std::int32_t height, std::uint16_t buffer[]) noexcept
 		{
 			for (std::int32_t r = 0; r < height; ++r)
 			{
 				for (std::int32_t c = 0; c < width; ++c)
 				{
-					buffer[r * width + c] = Om7GraphPixel(0, 0, 15, 15);
+					buffer[r * width + c] = 0x00FF; // RGBA4444 format: R=0, G=0, B=15, A=15
 				}
 			}
 		}

@@ -7,6 +7,7 @@ add_executable(om7
 	src/_main.cpp
 	src/_glfw.cpp
 	src/om7-application.cpp
+	src/om7-hgl.cpp
 )
 
 target_link_libraries(om7 PRIVATE heg)
