@@ -137,18 +137,18 @@ namespace om7
 
 	void Om7Application::OnInit()
 	{
-		GlInit();
+		hgl::Init();
 	}
 
 	void Om7Application::OnTerm()
 	{
-		GlTerm();
+		hgl::Term();
 	}
 
 	int Om7Application::Run()
 	{
 		OnInit();
-		double delTime = glfwGetTime() + FrameInterval;
+		double delTime = glfwGetTime() + hgl::FrameInterval;
 		int dropCount = 0;
 		bool dropFlag = false;
 		while (!glfwWindowShouldClose(Window))
@@ -156,16 +156,16 @@ namespace om7
 			OnUpdate();
 			dropCount = delTime <= glfwGetTime() ? dropCount + 1 : 0;
 			while (delTime >= glfwGetTime()) glfwPollEvents();
-			delTime = glfwGetTime() + FrameInterval;
+			delTime = glfwGetTime() + hgl::FrameInterval;
 			if (dropCount == 0 || dropCount >= 4)
 			{
-				OnGraphRender(ScreenWidth, ScreenHeight, ScreenBuffers[ScreenBufferIndex]);
+				OnGraphRender(hgl::ScreenWidth, hgl::ScreenHeight, hgl::GetScreenBuffer());
 				if (dropFlag)
 				{
 					// TODO: ドロップ特有処理
 					dropFlag = false;
 				}
-				GlRender();
+				hgl::RenderScreen();
 				glfwSwapBuffers(Window);
 			}
 			else

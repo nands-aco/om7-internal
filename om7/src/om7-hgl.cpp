@@ -2,62 +2,70 @@
 #include <cstdint>
 #include <glad/glad.h>
 
-namespace om7
+namespace om7::hgl
 {
-	GLuint Texture;
-	GLuint VertexShader;
-	GLuint FragmentShader;
-	GLuint Program;
-	GLuint VertexArray;
-	GLuint VerticesBuffer;
-	GLuint IndicesBuffer;
+	namespace
+	{
+		GLuint Texture;
+		GLuint VertexShader;
+		GLuint FragmentShader;
+		GLuint Program;
+		GLuint VertexArray;
+		GLuint VerticesBuffer;
+		GLuint IndicesBuffer;
 
-	const GLchar *VertexShaderSource =
-		"#version 300 es\n"
-		// "in highp vec2 position;\n"
-		// "in mediump vec2 texCoords;\n"
-		"layout(location = 0) in highp vec2 position;\n"
-		"layout(location = 1) in mediump vec2 texCoords;\n"
-		"out mediump vec2 TexCoords;\n"
-		"void main()\n"
-		"{\n"
-		"\tgl_Position = vec4(position, 0.0, 1.0);\n"
-		"\tTexCoords = texCoords;\n"
-		"}\n";
+		const GLchar *VertexShaderSource =
+			"#version 300 es\n"
+			// "in highp vec2 position;\n"
+			// "in mediump vec2 texCoords;\n"
+			"layout(location = 0) in highp vec2 position;\n"
+			"layout(location = 1) in mediump vec2 texCoords;\n"
+			"out mediump vec2 TexCoords;\n"
+			"void main()\n"
+			"{\n"
+			"\tgl_Position = vec4(position, 0.0, 1.0);\n"
+			"\tTexCoords = texCoords;\n"
+			"}\n";
+		//
+		//
+		//
+		const GLchar *FragmentShaderSource = 
+			"#version 300 es\n"
+			"in mediump vec2 TexCoords;\n"
+			"out mediump vec4 color;\n"
+			"uniform sampler2D ourTexture;\n"
+			"void main()\n"
+			"{\n"
+			"\tcolor = texture(ourTexture, TexCoords);\n"
+			"}\n";
+		//
+		//
+		//
+		const float Vertices[] =
+		{
+			/* 左上 */ -1.0f, +1.0f, +0.0f, +0.0f,
+			/* 左下 */ -1.0f, -1.0f, +0.0f, +1.0f,
+			/* 右下 */ +1.0f, -1.0f, +1.0f, +1.0f,
+			/* 右上 */ +1.0f, +1.0f, +1.0f, +0.0f,
+		};
+		//
+		//
+		//
+		const GLuint Indices[] =
+		{
+			/* １つめ */ 0, 1, 2,
+			/* ２つめ */ 0, 2, 3,
+		};
+
+		// 画面バッファを表します。
+		inline std::uint16_t ScreenBuffers[ScreenBufferCount][ScreenBufferSize];
+		// 使用中の画面バッファのインデックスを表します。
+		inline std::int32_t ScreenBufferIndex = 0;
+	}
 	//
 	//
 	//
-	const GLchar *FragmentShaderSource = 
-		"#version 300 es\n"
-		"in mediump vec2 TexCoords;\n"
-		"out mediump vec4 color;\n"
-		"uniform sampler2D ourTexture;\n"
-		"void main()\n"
-		"{\n"
-		"\tcolor = texture(ourTexture, TexCoords);\n"
-		"}\n";
-	//
-	//
-	//
-	const float Vertices[] =
-	{
-		/* 左上 */ -1.0f, +1.0f, +0.0f, +0.0f,
-		/* 左下 */ -1.0f, -1.0f, +0.0f, +1.0f,
-		/* 右下 */ +1.0f, -1.0f, +1.0f, +1.0f,
-		/* 右上 */ +1.0f, +1.0f, +1.0f, +0.0f,
-	};
-	//
-	//
-	//
-	const GLuint Indices[] =
-	{
-		/* １つめ */ 0, 1, 2,
-		/* ２つめ */ 0, 2, 3,
-	};
-	//
-	//
-	//
-	void GlInit()
+	void Init()
 	{
 		//
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -110,7 +118,7 @@ namespace om7
 	//
 	//
 	//
-	void GlTerm()
+	void Term()
 	{
 		//
 		glDeleteBuffers(1, &IndicesBuffer);
@@ -126,12 +134,19 @@ namespace om7
 	//
 	//
 	//
-	void GlRender()
+	void RenderScreen()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, ScreenWidth, ScreenHeight, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, ScreenBuffers[ScreenBufferIndex]);
 		// glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, ScreenWidth, ScreenHeight, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, ScreenBuffers[ScreenBufferIndex]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		ScreenBufferIndex = (ScreenBufferIndex + 1) & 1;
+	}
+	//
+	//
+	//
+	std::uint16_t *GetScreenBuffer()
+	{
+		return ScreenBuffers[ScreenBufferIndex];
 	}
 }

@@ -1,6 +1,6 @@
 #include <cstdint>
 
-namespace om7
+namespace om7::hgl
 {
 	// 1秒間に対するフレーム数を表します。
 	inline constexpr double FramesPerSecond = 60.0;
@@ -16,12 +16,11 @@ namespace om7
 	inline constexpr std::int32_t ScreenBufferSize = ScreenWidth * ScreenHeight;
 	// 画面のバッファ数を表します。
 	inline constexpr std::int32_t ScreenBufferCount = 2;
-	// 画面バッファを表します。
-	inline std::uint16_t ScreenBuffers[ScreenBufferCount][ScreenBufferSize];
-	// 使用中の画面バッファのインデックスを表します。
-	inline std::int32_t ScreenBufferIndex = 0;
-
-	extern void GlInit();
-	extern void GlTerm();
-	extern void GlRender();
+	//
+	//
+	//
+	extern void Init();
+	extern void Term();
+	extern void RenderScreen();
+	extern std::uint16_t *GetScreenBuffer();
 }
