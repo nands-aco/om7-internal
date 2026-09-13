@@ -3,7 +3,7 @@
 // GLFWでハンドリングしたイベントをOm7Applicationに通知するため、
 // Om7Applicationのインスタンスを引数として受け取るrun関数を定義します。
 //
-#include "om7-hgl.hpp"
+#include "om7-pgl.hpp"
 #include "om7-app.hpp"
 
 #include <cstdint>
@@ -129,18 +129,18 @@ namespace om7::app
 
 	void Om7Application::OnInit()
 	{
-		hgl::Init();
+		pgl::Init();
 	}
 
 	void Om7Application::OnTerm()
 	{
-		hgl::Term();
+		pgl::Term();
 	}
 
 	int Om7Application::Run()
 	{
 		OnInit();
-		double delTime = glfwGetTime() + hgl::FrameInterval;
+		double delTime = glfwGetTime() + pgl::FrameInterval;
 		int dropCount = 0;
 		bool dropFlag = false;
 		while (!glfwWindowShouldClose(Window))
@@ -148,16 +148,16 @@ namespace om7::app
 			OnUpdate();
 			dropCount = delTime <= glfwGetTime() ? dropCount + 1 : 0;
 			while (delTime >= glfwGetTime()) glfwPollEvents();
-			delTime = glfwGetTime() + hgl::FrameInterval;
+			delTime = glfwGetTime() + pgl::FrameInterval;
 			if (dropCount == 0 || dropCount >= 4)
 			{
-				OnGraphRender(hgl::ScreenWidth, hgl::ScreenHeight, hgl::GetScreenBuffer());
+				OnGraphRender(pgl::ScreenWidth, pgl::ScreenHeight, pgl::GetScreenBuffer());
 				if (dropFlag)
 				{
 					// TODO: ドロップ特有処理
 					dropFlag = false;
 				}
-				hgl::RenderScreen();
+				pgl::RenderScreen();
 				glfwSwapBuffers(Window);
 			}
 			else

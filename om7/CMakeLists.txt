@@ -23,8 +23,8 @@ add_executable(om7
 	${CMAKE_CURRENT_SOURCE_DIR}/src/_main.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/_glfw.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/om7-app.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/om7-hgl.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/om7-hal.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/om7-pgl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/om7-pal.cpp
 )
 #
 # 本体をリンクします。

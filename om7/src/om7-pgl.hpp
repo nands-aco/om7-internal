@@ -1,6 +1,6 @@
 #include <cstdint>
 
-namespace om7::hgl
+namespace om7::pgl
 {
 	// 1秒間に対するフレーム数を表します。
 	inline constexpr double FramesPerSecond = 60.0;

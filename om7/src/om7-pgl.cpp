@@ -1,8 +1,8 @@
-#include "om7-hgl.hpp"
+#include "om7-pgl.hpp"
 #include <cstdint>
 #include <glad/glad.h>
 
-namespace om7::hgl
+namespace om7::pgl
 {
 	namespace
 	{
