@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <iostream>
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 namespace om7::app
@@ -117,7 +117,7 @@ namespace om7::app
 		if (!Window) throw Om7RuntimeException("glfwCreateWindow failed.");
 		glfwMakeContextCurrent(Window);
 		glfwSwapInterval(0); // 自前60FPS制御のためVSync無効
-		if (gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)) == 0) throw Om7RuntimeException("Failed to initialize GLAD.");
+		if (gladLoadGL(reinterpret_cast<GLADloadfunc>(glfwGetProcAddress)) == 0) throw Om7RuntimeException("Failed to initialize GLAD.");
 		RegisterEventStubs(Window);
 	}
 
