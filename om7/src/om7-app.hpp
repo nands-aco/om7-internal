@@ -44,7 +44,7 @@ namespace om7::app
 			{
 				for (std::int32_t c = 0; c < width; ++c)
 				{
-					buffer[r * width + c] = heg::HegGraphPixel(std::rand() & 0xFF, std::rand() & 0xFF, std::rand() & 0xFF); // RGBA4444 format: R=0, G=0, B=15, A=15
+					buffer[r * width + c] = heg::hgl::HegColor(std::rand() & 0xFF, std::rand() & 0xFF, std::rand() & 0xFF); // RGBA4444 format: R=0, G=0, B=15, A=15
 				}
 			}
 		}
