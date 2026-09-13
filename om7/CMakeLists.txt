@@ -6,8 +6,8 @@ find_package(glfw3 CONFIG REQUIRED)
 # GLAD の参照
 #
 add_library(glad STATIC lib/glad/src/gl.c)
-target_include_directories(glad PUBLIC lib/glad/include)
 set_source_files_properties(lib/glad/src/gl.c PROPERTIES LANGUAGE C)
+target_include_directories(glad PUBLIC lib/glad/include)
 
 #
 # 本体のコンパイル
@@ -17,6 +17,7 @@ add_executable(om7
 	src/_glfw.cpp
 	src/om7-app.cpp
 	src/om7-hgl.cpp
+	src/om7-hal.cpp
 )
 
 #
