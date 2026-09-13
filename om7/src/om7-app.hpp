@@ -6,7 +6,7 @@
 
 class GLFWwindow;
 
-namespace om7
+namespace om7::app
 {
 	class Om7RuntimeException : public std::runtime_error
 	{

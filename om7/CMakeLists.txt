@@ -6,7 +6,7 @@ find_package(glad CONFIG REQUIRED)
 add_executable(om7
 	src/_main.cpp
 	src/_glfw.cpp
-	src/om7-application.cpp
+	src/om7-app.cpp
 	src/om7-hgl.cpp
 )
 

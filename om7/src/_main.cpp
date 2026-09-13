@@ -1,9 +1,9 @@
-#include "om7-application.hpp"
+#include "om7-app.hpp"
 
 #include <cstdint>
 #include <memory>
 
-std::unique_ptr<om7::Om7Application> application = std::make_unique<om7::Om7Application>("OverMode7", 240, 240);
+std::unique_ptr<om7::app::Om7Application> application = std::make_unique<om7::app::Om7Application>("OverMode7", 240, 240);
 
 int main(int argc, char* argv[])
 {
