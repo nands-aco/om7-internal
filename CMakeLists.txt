@@ -10,5 +10,9 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if (MSVC)
+	add_compile_options("/utf-8")
+endif()
+
 add_subdirectory(heg)
 add_subdirectory(om7)
