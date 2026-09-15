@@ -1,5 +1,5 @@
 #define HEG_HGL_CPP_INCLUDED
-#include "heg-heg.hpp"
+#include "heg-hgl.hpp"
 #include <algorithm>
 
 namespace heg::hgl
