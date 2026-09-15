@@ -7,7 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #
 #
 #
-add_library(heg ${CMAKE_CURRENT_SOURCE_DIR}/src/heg.cpp)
+add_library(heg
+	${CMAKE_CURRENT_SOURCE_DIR}/src/heg.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/heg-hgl.cpp
+)
 #
 #
 #

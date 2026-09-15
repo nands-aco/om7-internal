@@ -20,3 +20,5 @@ namespace heg::hgl
 	};
 	static_assert(sizeof(HegColor) == sizeof(std::uint16_t));
 }
+
+#include "heg-heg.hpp"
